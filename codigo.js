@@ -6,7 +6,7 @@ const KPI_CONFIG = {
   asistentes:             { label: 'Asistentes',           bar: 'bg-slate-400',   num: 'text-slate-600'   },
   ponentesInvestigacion:  { label: 'Ponentes Inv.',        bar: 'bg-indigo-500',  num: 'text-indigo-700'  },
   ponentesEmprendimiento: { label: 'Ponentes Emp.',        bar: 'bg-orange-400',  num: 'text-orange-600'  },
-  trabajosRecibidos:      { label: 'Trabajos',             bar: 'bg-teal-500',    num: 'text-teal-700'    },
+  trabajosRecibidos:      { label: 'Total de trabajos',    bar: 'bg-teal-500',    num: 'text-teal-700'    },
   pitchesRecibidos:       { label: 'Pitches',              bar: 'bg-emerald-500', num: 'text-emerald-700' },
 };
 
@@ -50,7 +50,7 @@ function renderDashboard(data) {
       <td class="p-3 font-medium text-gray-900 whitespace-nowrap">${row.pais}</td>
       <td class="p-3 text-gray-600 whitespace-nowrap">${row.perfil}</td>
       ${numCell(row.asistente)}${numCell(row.propuesta)}${numCell(row.enDesarrollo)}
-      ${numCell(row.finalizada)}${numCell(row.innovacion)}${numCell(row.emprendimiento)}
+      ${numCell(row.finalizada)}${numCell(row.emprendimiento)}
     </tr>`).join('');
 
   filterAndRenderTable();

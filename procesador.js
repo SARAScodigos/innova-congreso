@@ -15,6 +15,8 @@ function processData() {
   const sheet    = workbook.Sheets[workbook.SheetNames[0]];
   const data     = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
 
+  const headers = data[0] || [];
+  const idxPitchVideo = headers.findIndex(header => header.toString().trim() === 'Pitch (Video)');
   const rows = data.slice(1).filter(row => row.some(c => c !== ''));
 
   let totalInscritos = rows.length;
@@ -34,6 +36,7 @@ function processData() {
     const perfil          = str(9)  || 'No especificado';
     const modalidad       = str(10);
     const tipoTrabajo     = str(12);
+    const pitchVideo      = idxPitchVideo >= 0 ? str(idxPitchVideo) : str(23);
 
     const instFinal = (
       institucion === 'Otra  Universidad, Empresa u Organización' ||
@@ -48,21 +51,21 @@ function processData() {
     const esPropuesta      = esInvestigacion && tipoTrabajo.includes('Propuesta')              ? 1 : 0;
     const esEnDesarrollo   = esInvestigacion && tipoTrabajo.includes('en desarrollo')           ? 1 : 0;
     const esFinalizada     = esInvestigacion && tipoTrabajo.includes('finalizada')              ? 1 : 0;
-    const esInnovacion     = esInvestigacion && tipoTrabajo.includes('innovación pedagógica')   ? 1 : 0;
+    const tienePitchVideo  = pitchVideo ? 1 : 0;
 
     if (esAsistente)      asistentes++;
     if (esInvestigacion)  { ponentesInvestigacion++;   trabajosRecibidos++; }
-    if (esEmprendimiento) { ponentesEmprendimiento++;  pitchesRecibidos++;  }
+    if (esEmprendimiento) ponentesEmprendimiento++;
+    if (tienePitchVideo)  pitchesRecibidos++;
 
     const clave = `${pais}|||${perfil}`;
     if (!matriz[clave]) {
-      matriz[clave] = { pais, perfil, asistente: 0, propuesta: 0, enDesarrollo: 0, finalizada: 0, innovacion: 0, emprendimiento: 0 };
+      matriz[clave] = { pais, perfil, asistente: 0, propuesta: 0, enDesarrollo: 0, finalizada: 0, emprendimiento: 0 };
     }
     matriz[clave].asistente      += esAsistente;
     matriz[clave].propuesta      += esPropuesta;
     matriz[clave].enDesarrollo   += esEnDesarrollo;
     matriz[clave].finalizada     += esFinalizada;
-    matriz[clave].innovacion     += esInnovacion;
     matriz[clave].emprendimiento += esEmprendimiento;
 
     let trabajo = '—', documento = '';
@@ -71,7 +74,7 @@ function processData() {
       documento = str(18);
     } else if (esEmprendimiento) {
       trabajo   = str(20) || 'Sin nombre';
-      documento = str(23);
+      documento = pitchVideo;
     }
 
     // Solo datos públicos — sin emails, teléfonos ni DNI
