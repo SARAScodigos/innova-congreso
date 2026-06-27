@@ -1,0 +1,11 @@
+{
+  "name": "dashboard-innovalatam-procesador",
+  "version": "1.0.0",
+  "description": "Conversor Excel → JSON para dashboard público",
+  "scripts": {
+    "generar": "node procesador.js"
+  },
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  }
+}
